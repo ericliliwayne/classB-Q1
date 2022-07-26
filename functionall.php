@@ -1,14 +1,17 @@
 <?php
 date_default_timezone_set("Asia/Taipei");
 session_start();
+
 class DB{
 
 //宣告成員屬性
-private $dsn="mysql:host=localhost;charset=utf8;dbname=db01";
+private $dsn="mysql:host=localhost;charset=utf8;dbname=dbq1";
 private $root='root';
 private $password='';
 private $table;
 private $pdo;
+
+
 
 //建立建構式，在建構時帶入table名稱會建立資料庫的連線
 public function __construct($table){
@@ -219,5 +222,16 @@ public function all(...$arg){
             
 
 }
+$title = new DB('title');
+$ad = new DB('ad');
+$mvim = new DB('mvim');
+$image = new DB('image');
+$news = new DB('news');
+$admin = new DB('admin');
+$menu = new DB('menu');
+$bottom = new DB('bottom');
+$total = new DB('total');
+
+echo $total->find(1)['total'];
 
 ?>
