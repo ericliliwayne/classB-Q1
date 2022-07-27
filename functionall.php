@@ -207,19 +207,12 @@ public function all(...$arg){
             return $this->pdo->exec($sql);
             
             }
-            
-            public function q($sql){
+}
 
-                return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
-            
-            }
 
-            function to($url){
+function to($url){
 
-                header("location:".$url);
-            
-            }
-            
+    header("location:".$url);
 
 }
 $title = new DB('title');
@@ -232,6 +225,14 @@ $menu = new DB('menu');
 $bottom = new DB('bottom');
 $total = new DB('total');
 
-echo $total->find(1)['total'];
+$total->save(['id'=>1,'total'=>$_POST['total']]);
+
+if(isset($_SESSION['total'])){
+    $toTal = $total->find(1);
+    $toTal['total']++;
+    $toTal->save($total);
+    $_SESSION['total'] = $toTal['total'];
+
+}
 
 ?>
