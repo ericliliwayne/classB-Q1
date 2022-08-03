@@ -8,8 +8,15 @@ class DB{
 private $dsn="mysql:host=localhost;charset=utf8;dbname=dbq1";
 private $root='root';
 private $password='';
-private $table;
+// private $table;
 private $pdo;
+public $table;
+public $title;
+public $button;
+public $header;
+public $append;
+public $upload;
+
 
 
 
@@ -17,6 +24,63 @@ private $pdo;
 public function __construct($table){
     $this->table=$table;
     $this->pdo=new PDO($this->dsn,$this->root,$this->password);
+    $this->setStr($table);
+}
+
+private function setStr($table){
+    switch($table){
+        case "title":
+            $this->title="網站標題管理";
+            $this->button="新增網站標題圖片";
+            $this->header="網站標題";
+            $this->append="替代文字";
+            $this->upload="網站標題圖片";
+        break;
+        case "ad":
+           $this->title="動態文字廣告管理";
+           $this->button="新增動態文字廣告";
+           $this->header="動態文字廣告";
+        break;
+        case "mvim":
+           $this->title="動畫圖片管理";
+           $this->button="新增動畫圖片";
+           $this->header="動畫圖片";
+           $this->upload="動畫圖片";
+        break;
+        case "image":
+           $this->title="校園映像資料管理";
+           $this->button="新增校園映像圖片";
+           $this->header="校園映像資料圖片";
+           $this->upload="校園映像圖片";
+        break;
+        case "total":
+           $this->title="進站總人數管理";
+           $this->button="";
+           $this->header="進站總人數:";
+        break;
+        case "bottom":
+           $this->title="頁尾版權資料管理";
+           $this->button="";
+           $this->header="頁尾版權資料";
+        break;
+        case "news":
+           $this->title="最新消息資料管理";
+           $this->button="新增最新消息資料";
+           $this->header="最新消息資料內容";
+        break;
+        case "admin":
+           $this->title="管理者帳號管理";
+           $this->button="新增管理者帳號";
+           $this->header="帳號";
+           $this->append="密碼";
+        break;
+        case "menu":
+           $this->title="選單管理";
+           $this->button="新增主選單";
+           $this->header="主選單名稱";
+           $this->append="選單連結網址";
+        break;
+    }
 }
 
 //此方法可能會有不帶參數，一個參數及二個參數的用法，因此使用不定參數的方式來宣告
@@ -141,7 +205,7 @@ public function all(...$arg){
             
                 }
             
-            //echo $sql;
+            // echo $sql;
             return $this->pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
             
             }
@@ -207,6 +271,8 @@ public function all(...$arg){
             return $this->pdo->exec($sql);
             
             }
+
+            
 }
 
 
@@ -215,24 +281,58 @@ function to($url){
     header("location:".$url);
 
 }
-$title = new DB('title');
-$ad = new DB('ad');
-$mvim = new DB('mvim');
-$image = new DB('image');
-$news = new DB('news');
-$admin = new DB('admin');
-$menu = new DB('menu');
-$bottom = new DB('bottom');
-$total = new DB('total');
+$Title = new DB('title');
+$Ad = new DB('ad');
+$Mvim = new DB('mvim');
+$Image = new DB('image');
+$News = new DB('news');
+$Admin = new DB('admin');
+$Menu = new DB('menu');
+$Bottom = new DB('bottom');
+$Total = new DB('total');
 
-$total->save(['id'=>1,'total'=>$_POST['total']]);
 
-if(isset($_SESSION['total'])){
-    $toTal = $total->find(1);
-    $toTal['total']++;
-    $toTal->save($total);
-    $_SESSION['total'] = $toTal['total'];
+// $Total->save(['id'=>1,'total'=>$_POST['total']]);
+
+if(!isset($_SESSION['total'])){
+    $total = $Total->find(1);
+    $total['total']++;
+    $Total->save($total);
+    $_SESSION['total'] = $total['total'];
 
 }
+
+$tt=$_GET['do']??'';  //取得網址參數do的值
+
+switch($tt){   //利用網址參數來轉換$DB代表的資料表
+    case "ad":
+        $DB=$Ad;
+    break;
+    case "mvim":
+        $DB=$Mvim;
+    break;
+    case "image":
+        $DB=$Image;
+    break;
+    case "total":
+        $DB=$Total;
+    break;
+    case "bottom":
+        $DB=$Bottom;
+    break;
+    case "news":
+        $DB=$News;
+    break;
+    case "admin":
+        $DB=$Admin;
+    break;
+    case "menu":
+        $DB=$Menu;
+    break;
+    default:
+        $DB=$Title;
+    break;
+}
+
 
 ?>
