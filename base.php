@@ -73,7 +73,7 @@
                         $tmp[]="`$key`='$value'";
                     }
                 }
-                $sql = "UPDATE $this->table FROM " . join(" , ",$tmp)." WHERE `id`='{$array['id']}'";
+                $sql = "UPDATE $this->table SET " . join(" , ",$tmp)." WHERE `id`='{$array['id']}'";
             }else{
                 //沒帶id的陣列就代表執行「新增」的動作
                 $sql = "INSERT INTO $this->table (`".join("`,`",array_keys($array))."`) VALUES('".join("','",$array)."') ";
